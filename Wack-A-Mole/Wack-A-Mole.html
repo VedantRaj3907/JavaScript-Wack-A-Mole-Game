@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Wack-A-Mole Game</title>
+	<link rel="stylesheet" href="E:\Sem 4\Javascript\Project\Wack-A-Mole\style.css">
+</head>
+<body>
+	<div class="vid">
+		<video id="backvid" autoplay muted>
+			<source id="video_b" src="E:\Sem 4\Javascript\Project\Wack-A-Mole\images\Mountain Field Highland - Free Cartoon Background Loop.mkv" type="video/mp4" />
+		</video>	
+	</div>
+	
+	<div class="main">
+		<div class="heading">
+			<p id="head">Wack-A-Mole Game</p>
+			<p id="head2">Wack-A-Mole Game</p>
+		</div>
+		<div class="points">
+			<p id="point1" data-text="Points">Points</p><span id="p_num">0</span>
+			<img id="mole_top1" src="E:\Sem 4\Javascript\Project\Wack-A-Mole\images\mole_top.png"></img>
+			<img id="mole_top2" src="E:\Sem 4\Javascript\Project\Wack-A-Mole\images\mole_top_2.png"></img>
+		</div>
+		<div class="holes ">
+			<div class="hole hole1"></div>
+			<div class="hole hole2"></div>
+			<div class="hole hole3"></div>
+			<div class="hole hole4"></div>
+			<div class="hole hole5"></div>
+			<div class="hole hole6"></div>
+			<div class="hole hole7"></div>
+			<div class="hole hole8"></div>
+			<div class="hole hole9"></div>
+		</div>
+		<div class="buttons">
+			<button type="button" id="start">Start</button>
+			<button type="button" id="stop">Stop</button>
+		</div>
+		<div class="cursor">
+			<img src="E:\Sem 4\Javascript\Project\Wack-A-Mole\images\hammer.png">
+		</div>
+		<p class="final"></p>
+		<p class="high_score"></p>
+	</div>
+
+	<script type="text/javascript">
+		const backvid = document.getElementById('backvid');
+		const score = document.querySelector('#p_num');
+		const holes = document.querySelectorAll('.hole');
+		const startbtn = document.getElementById('start');
+		const stopbtn = document.getElementById('stop');
+		const cursor = document.querySelector('.cursor img');
+		const final_score = document.querySelector('.final');
+		const high_score = document.querySelector('.high_score');
+		let h_points = 0,b=0 ;
+		if(b == 0)
+		{
+			backvid.autoplay = true;
+			backvid.muted = true;
+			backvid.loop = true;
+			backvid.load();
+		}
+		window.addEventListener("mousemove", (e) => {
+			  cursor.style.top = e.pageY + "px";
+			  cursor.style.left = e.pageX + "px";
+			  window.addEventListener("click", () => {
+			    cursor.style.animation = "hit 0.1s ease";
+			    setTimeout(() => {
+			      cursor.style.removeProperty("animation");
+			  }, 100);
+			});
+		});
+
+		startbtn.addEventListener("click", () => {
+			startbtn.style.display = "none";
+			stopbtn.style.display = "inline-block";
+			final_score.innerHTML="";
+			let hole;
+			let points = 0;
+			let image = document.createElement("img");
+			image.setAttribute("src","E:/Sem 4/Javascript/Project/Wack-A-Mole/images/mole.png");
+			image.setAttribute("class","mole_img");
+			const startGame = setInterval(() => {
+				let point=0;
+			    let arrayNo = Math.floor(Math.random() * 9);
+			    hole = holes[arrayNo];
+			    
+			    hole.appendChild(image);
+
+			    setTimeout(()=>
+			    {
+			    	hole.removeChild(image);
+			    },600)
+			},700);
+
+			window.addEventListener("click", (e) =>
+			{
+				if (e.target === image || e.target === hole)
+				{
+					score.innerHTML = ++points;
+					score.classList.add('greenglow');
+					setTimeout(function () {score.classList.remove('greenglow')},300);
+				}
+			})
+			stopbtn.addEventListener("click", () =>
+			{
+				clearInterval(startGame);
+				startbtn.style.display = "inline-block";
+				stopbtn.style.display = "none";
+				final_score.innerHTML = "Your Final Score is :- "+points;
+				score.innerHTML = 0;
+				if(points>h_points)
+				{
+					console.log(final_score);
+					h_points = points;
+					high_score.innerHTML = "Highest Score :- " + h_points;
+					high_score.classList.add('high_score_anime');
+				}
+			})
+		});
+
+
+	</script>
+</body>
+</html>
